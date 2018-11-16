@@ -7,16 +7,39 @@ Answer *get_indices_of_item_weights(int *weights, int length, int limit)
 {
   HashTable *ht = create_hash_table(16);
 
-  // YOUR CODE HERE
+  if (length == 1)
+  {
+    return NULL;
+  }
 
+  for (int i = 0; i < length; i++)
+  {
+    hash_table_insert(ht, weights[i], i);
+  }
+
+  Answer *answer = NULL;
+
+  for (int i = 0; i < length; i++)
+  {
+    int weight2 = limit - weights[i];
+    if (hash_table_retrieve(ht, weight2) != NULL)
+    {
+      answer->index_1 = i;
+      answer->index_2 = hash_table_retrieve(ht, weight2);
+    }
+  }
   return NULL;
+
 }
 
 void print_answer(Answer *answer)
 {
-  if (answer != NULL) {
+  if (answer != NULL)
+  {
     printf("%d %d\n", answer->index_1, answer->index_2);
-  } else {
+  }
+  else
+  {
     printf("NULL\n");
   }
 }
