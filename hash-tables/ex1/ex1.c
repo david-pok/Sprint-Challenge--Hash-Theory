@@ -7,29 +7,21 @@ Answer *get_indices_of_item_weights(int *weights, int length, int limit)
 {
   HashTable *ht = create_hash_table(16);
 
-  if (length == 1)
-  {
-    return NULL;
-  }
-
-  for (int i = 0; i < length; i++)
-  {
-    hash_table_insert(ht, weights[i], i);
-  }
-
-  Answer *answer = NULL;
-
-  for (int i = 0; i < length; i++)
-  {
-    int weight2 = limit - weights[i];
-    if (hash_table_retrieve(ht, weight2) != NULL)
-    {
+  for (int i = 0; i < length; i++) {
+    int complement = hash_table_retrieve(ht, limit - weights[i]);
+    if (complement != -1) {
+      //we found a match
+      Answer *answer = malloc(sizeof(Answer));
       answer->index_1 = i;
-      answer->index_2 = hash_table_retrieve(ht, weight2);
+      answer->index_2 = complement;
+      return answer;
+    } else {
+      //insert into the hash table
+      //the weight is the key and the array index is value
+      hash_table_insert(ht, weights[i], i);
     }
   }
   return NULL;
-
 }
 
 void print_answer(Answer *answer)
